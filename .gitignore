@@ -1,0 +1,236 @@
+# ---------------------------------------------------------------------------
+# Downloaded installers (not part of the project)
+# ---------------------------------------------------------------------------
+*.deb
+*.rpm
+
+# ---------------------------------------------------------------------------
+# Python
+# ---------------------------------------------------------------------------
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.pyd
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Testing / coverage / type checking
+.pytest_cache/
+.hypothesis/
+.tox/
+.nox/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+*.cover
+.mypy_cache/
+.dmypy.json
+.pyre/
+.pytype/
+.ruff_cache/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.conda/
+conda-env/
+
+# Jupyter
+.ipynb_checkpoints/
+profile_default/
+ipython_config.py
+
+# ---------------------------------------------------------------------------
+# C / C++ / CUDA build artifacts
+# ---------------------------------------------------------------------------
+*.o
+*.obj
+*.a
+*.lib
+*.la
+*.lo
+*.slo
+*.dll
+*.dylib
+*.exe
+*.out
+*.app
+*.d
+*.gch
+*.pch
+*.ilk
+*.pdb
+*.exp
+*.idb
+
+# CUDA-specific intermediates
+*.cubin
+*.fatbin
+*.ptx
+*.sass
+*.cu.o
+*.cudafe1.*
+*.cpp1.ii
+*.cpp4.ii
+*.module_id
+*.reg.c
+*.i
+*.ii
+
+# Keep intentionally committed reference dumps (PTX/SASS studies)
+!**/reference/*.ptx
+!**/reference/*.sass
+
+# ---------------------------------------------------------------------------
+# Build directories & build systems
+# ---------------------------------------------------------------------------
+build/
+_build/
+cmake-build-*/
+out/
+bin/
+obj/
+CMakeCache.txt
+CMakeFiles/
+CMakeScripts/
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+CTestTestfile.cmake
+Testing/
+Makefile
+# ...except hand-written ones that are part of the material, not generated
+!c-lessons/Makefile
+!c-lessons/**/Makefile
+!learning/Makefile
+!learning/**/Makefile
+*.ninja
+.ninja_deps
+.ninja_log
+
+# PyTorch C++/CUDA extension build output
+torch_extensions/
+*.so.*
+
+# ---------------------------------------------------------------------------
+# Profiling artifacts (can be very large — commit summaries, not raw captures)
+# ---------------------------------------------------------------------------
+# Nsight Systems
+*.nsys-rep
+*.qdrep
+*.qdstrm
+*.sqlite
+nsys-reports/
+
+# Nsight Compute
+*.ncu-rep
+*.nsight-cuprof-report
+ncu-reports/
+
+# Legacy / other profilers
+*.nvvp
+*.nvprof
+*.prof
+
+# PyTorch profiler traces & TensorBoard
+*.pt.trace.json
+*.pt.trace.json.gz
+trace_*.json
+runs/
+tb_logs/
+log_dir/
+
+# Raw profiling output directories — export summaries into profiling/reports/ instead
+profiling/**/raw/
+profiling/**/captures/
+
+# ---------------------------------------------------------------------------
+# Benchmark output (raw runs are machine-specific; commit curated results only)
+# ---------------------------------------------------------------------------
+benchmarks/**/raw/
+benchmarks/**/*.tmp.csv
+*.bench.json.tmp
+
+# ---------------------------------------------------------------------------
+# Caches
+# ---------------------------------------------------------------------------
+.cache/
+.triton/
+triton_cache/
+.inductor_cache/
+torchinductor_*/
+.torch/
+.nv/
+.ccache/
+.clangd/
+.cache/clangd/
+
+# ---------------------------------------------------------------------------
+# Models, datasets and other large binaries
+# ---------------------------------------------------------------------------
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.onnx
+*.engine
+*.plan
+data/
+datasets/
+checkpoints/
+
+# ---------------------------------------------------------------------------
+# Editors / IDEs
+# ---------------------------------------------------------------------------
+.vscode/
+!.vscode/settings.json.example
+.idea/
+*.swp
+*.swo
+*~
+.vs/
+*.user
+*.suo
+
+# ---------------------------------------------------------------------------
+# OS
+# ---------------------------------------------------------------------------
+.DS_Store
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+# ---------------------------------------------------------------------------
+# Temporary / scratch
+# ---------------------------------------------------------------------------
+tmp/
+temp/
+scratch/
+*.log
+*.tmp
+*.bak
+*.orig
+*.rej
+core
+core.*
