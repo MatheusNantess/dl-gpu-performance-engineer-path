@@ -1,7 +1,120 @@
 # 01 — O Pipeline de Execução da CPU
 
-> Pré-requisito: Phase 0 completa (em particular, saber ler assembly em nível básico
-> ajuda, mas não é exigido).
+> Pré-requisito: Phase 0 completa. **Você não precisa saber nada de arquitetura de
+> computadores ainda** — as quatro seções abaixo (0.1 a 0.4) constroem isso do zero,
+> antes de qualquer coisa sobre pipeline. Se você já sabe o que é CPU/instrução/
+> registrador/clock, pode pular direto pra seção 1.
+
+## 0.1 — O que é uma CPU, na prática (esqueça tudo que você já ouviu sobre isso)
+
+Uma CPU é um chip físico que faz **uma coisa só, repetidamente, absurdamente rápido**: pega
+uma instrução minúscula, faz exatamente o que ela manda, pega a próxima. Ela não "entende"
+C++. Ela não sabe o que é um `for`, nem o que é uma função. Tudo que você escreve em C++
+precisa primeiro virar uma sequência enorme dessas instruções minúsculas — e isso já
+aconteceu com você hoje, sem você perceber que estava vendo isso de perto.
+
+## 0.2 — O que é uma instrução (você já viu instruções de verdade hoje)
+
+Lembra do Módulo 07 (Compilation), quando rodamos `g++ -S` no arquivo com a função `soma`?
+Saiu isto:
+
+```
+_Z4somaii:
+    endbr64
+    pushq   %rbp
+    movq    %rsp, %rbp
+```
+
+**Cada linha dessas é uma instrução.** `pushq` significa "empurra um valor pra pilha".
+`movq` significa "move um valor de um lugar pra outro". São operações **absurdamente
+simples** — nenhuma delas "calcula uma soma inteira" sozinha. A função `soma(a, b)` inteira,
+quando compilada, vira uma sequência de várias dessas instruções minúsculas, uma atrás da
+outra. A CPU não vê "somar dois números" como uma coisa só — ela vê uma fila comprida de
+passos pequenininhos, e "somar dois números" é o que **emerge** de rodar essa fila inteira,
+em ordem.
+
+Isso é literalmente o que o compilador faz: pega seu código C++ (que fala a sua língua) e
+traduz pra essa lista de instruções (que fala a língua que o chip entende).
+
+## 0.3 — O que é um registrador (contraste direto com o que você já domina: pointer/RAM)
+
+Repara em `%rbp` e `%rsp` naquele output. Você pode pensar que são endereços de memória
+(tipo os `0x1000` que você já manipulou o dia inteiro com pointer) — **não são**. São
+**nomes de registradores**.
+
+Um registrador é um espacinho de armazenamento **construído dentro do próprio chip da
+CPU**, não na RAM. A diferença não é só "onde fisicamente mora" — é uma diferença de
+categoria inteira:
+
+| | Registrador | RAM (o que você já domina) |
+| --- | --- | --- |
+| Quantos existem | Pouquíssimos (~16 de uso geral, numa CPU x86-64 típica) | Bilhões de posições (gigabytes) |
+| Como você "endereça" | Por **nome fixo** (`%rax`, `%rbp`, `%rsp`...) | Por **endereço numérico** (`0x1000`, calculado) |
+| Velocidade de acesso | Praticamente instantâneo — literalmente fiado direto na ULA que faz o cálculo | Precisa de uma "viagem" real (arquivo 04 explica o custo disso) |
+| Tamanho de cada um | Um número só (8 bytes, numa CPU 64-bit) | O espaço que você quiser, contíguo |
+
+Quando o compilador decide onde uma variável do seu código vai morar durante um cálculo,
+ele tem duas opções: deixar ela num registrador (rapidíssimo, mas só cabem pouquíssimas
+coisas por vez) ou deixar ela na stack/RAM (mais devagar de acessar, mas espaço
+praticamente ilimitado — a stack, aliás, é exatamente a mesma stack que você já estudou a
+fundo no Phase 0). `pushq %rbp` está literalmente pegando o que está no registrador `rbp`
+e guardando na stack, pra abrir espaço — você já tem o vocabulário de stack pra entender
+essa linha, só faltava saber que `%rbp` é registrador, não endereço.
+
+**PERGUNTA RÁPIDA 0.1**: por que só existem "pouquíssimos" registradores (uma dúzia e
+pouco), enquanto a RAM tem bilhões de posições?
+
+<details>
+<summary>Resposta</summary>
+
+Porque registrador é construído com o material mais caro e mais rápido que existe dentro do
+chip — cada um custa espaço físico de silício, energia, e complexidade de fiação direta com
+a ULA. Não dá pra ter "bilhões de registradores" pela mesma razão que não dá pra ter uma L1
+gigante (arquivo 04 vai formalizar essa mesma tensão: rápido e pequeno vs grande e lento —
+aqui você já está vendo a primeira instância dela, um nível acima até da cache).
+
+</details>
+
+## 0.4 — O que é um ciclo de clock
+
+A CPU tem um "relógio" interno — um sinal elétrico que pisca numa taxa fixa e absurdamente
+rápida, tipo um metrônomo. "3 GHz" significa **3 bilhões de piscadas por segundo**. Cada
+"piscada" é chamada de **ciclo de clock**, e é a unidade de tempo mais básica que existe
+dentro do chip — cada passo físico que um circuito faz (mover um sinal elétrico de um lugar
+pro outro, por exemplo) acontece sincronizado com essas piscadas.
+
+Quando dissermos, na seção 2, que "buscar uma instrução leva 1 ciclo", isso quer dizer:
+leva o tempo de **uma piscada** desse relógio — algo na casa de frações de nanossegundo,
+numa CPU moderna.
+
+**PERGUNTA RÁPIDA 0.2**: se uma CPU roda a 3 GHz (3 bilhões de ciclos por segundo), quanto
+tempo dura **um único ciclo**?
+
+<details>
+<summary>Resposta</summary>
+
+`1 / 3.000.000.000 segundos ≈ 0,33 nanossegundos` por ciclo. Pra comparação: lembra que o
+arquivo 04 vai te dizer que um acesso à RAM leva ~100ns? Isso equivale a **~300 ciclos de
+CPU** — ou seja, enquanto um acesso à memória acontece, a CPU "perderia" a chance de rodar
+umas 300 instruções, se ficasse simplesmente esperando parada. Essa é exatamente a
+motivação física por trás de tudo que os arquivos 04 e 05 vão desenvolver depois.
+
+</details>
+
+## O que você já sabe, agora, antes de continuar
+
+- **CPU** roda instruções minúsculas, uma lista comprida delas, gerada pelo compilador a
+  partir do seu C++.
+- **Instrução** é um passo mínimo (`pushq`, `movq`, `add`, etc.) — você já viu instruções
+  reais, geradas do seu próprio código.
+- **Registrador** é armazenamento rapidíssimo, dentro do chip, por nome fixo, quantidade
+  pequena — diferente de RAM, que você já domina.
+- **Ciclo de clock** é a unidade de tempo física mínima dentro do chip — tudo é medido em
+  quantos ciclos algo leva.
+
+Com esse vocabulário, a seção 1 (que já existia) agora faz sentido desde a primeira frase.
+
+---
 
 ## 1. Intuição: uma instrução não acontece "de uma vez"
 
