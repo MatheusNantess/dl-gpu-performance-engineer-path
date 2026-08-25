@@ -19,5 +19,6 @@ This is distinct from the other places knowledge lives in this repository:
 | --- | --- | --- |
 | [cpp/phase-00-cpp-foundations](cpp/phase-00-cpp-foundations/) | Phase 0 | In progress — only Part E of `cuda-readiness-checkpoint.md` remaining |
 | [phase-01-computer-architecture](phase-01-computer-architecture/) | Phase 1 | Not started — generated 2026-08-20, not yet worked through |
+| [phase-02-gpu-architecture](phase-02-gpu-architecture/) | Phase 2 | Ready to start — material generated 2026-08-25; launch overhead and architecture experiments still unmeasured |
 
 More get added as the roadmap reaches phases that need structured material rather than reference notes.
