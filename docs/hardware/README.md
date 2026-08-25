@@ -50,6 +50,6 @@ Copy this per device, fill it from measurement rather than from a datasheet, and
 
 | Device | Role | Record |
 | --- | --- | --- |
-| NVIDIA RTX 3060 | Primary lab GPU (Ampere GA106) | [rtx-3060.md](rtx-3060.md) — identity and software recorded 2026-08-15; **measured peaks still empty** |
+| NVIDIA RTX 3060 | Primary lab GPU (Ampere GA106) | [rtx-3060.md](rtx-3060.md) — identity/software recorded; bandwidth and global-memory latency measured 2026-08-23; launch/compute peaks still pending |
 
 Cloud devices get added as they are used, particularly for FP8 and multi-GPU work, which this device cannot do.
