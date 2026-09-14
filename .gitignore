@@ -243,3 +243,7 @@ cuda-lab/fundamentals/01-vector-add/ex3
 cuda-lab/fundamentals/01-vector-add/excorrect
 cuda-lab/fundamentals/01-vector-add/vectoradd
 profiling/nsight-compute/matmul_naive
+cuda-lab/fundamentals/01-vector-add/02
+cuda-lab/fundamentals/01-vector-add/versionmatmul
+fundamentals/01-vector-add/matrix_naive/naive_4096_def
+fundamentals/01-vector-add/mutmul_naive_tilled/matmultilled_definitive
