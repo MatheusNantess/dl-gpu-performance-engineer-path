@@ -234,3 +234,12 @@ scratch/
 *.rej
 core
 core.*
+
+# ---------------------------------------------------------------------------
+# Stray local build binaries (extensionless, compiled ad hoc while iterating)
+# ---------------------------------------------------------------------------
+cuda-lab/fundamentals/01-vector-add/ex1
+cuda-lab/fundamentals/01-vector-add/ex3
+cuda-lab/fundamentals/01-vector-add/excorrect
+cuda-lab/fundamentals/01-vector-add/vectoradd
+profiling/nsight-compute/matmul_naive
