@@ -10,14 +10,21 @@
 // (sem shared memory/tiling): percorre a linha inteira de A e a coluna inteira de B,
 // somando os produtos — daí "naive", cada elemento de A/B é relido por várias threads.
 __global__ void GpuMatrixMultiplication(float *A, float *B, float *C, int m, int n, int o){
+    // Índice global da linha de A/C que essa thread vai processar.
     int row = threadIdx.y + blockDim.y * blockIdx.y;
+    // Índice global da coluna de B/C que essa thread vai processar.
     int col = threadIdx.x + blockDim.x * blockIdx.x;
 
+    // Só calcula se estiver dentro dos limites reais da matriz de saída (m x o).
     if(row < m && col < o){
+        // Acumulador do produto escalar linha(A) . coluna(B) para C[row][col].
         float sum = 0;
+        // Percorre toda a dimensão compartilhada n, lendo A e B direto da global memory
+        // (sem cache em shared memory) — cada iteração é uma multiplicação-e-soma.
         for(int i = 0; i < n; i++){
             sum += A[row * n + i] * B[i * o + col];
         }
+        // Grava o resultado final desse elemento em C, na posição linearizada row*o + col.
         C[row*o + col] = sum;
     }
 }
