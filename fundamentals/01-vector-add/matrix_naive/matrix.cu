@@ -6,6 +6,9 @@
 #define O 4096
 #define BLOCK_SIZE 16
 
+// Cada thread calcula um único elemento C[row][col], lendo direto da global memory
+// (sem shared memory/tiling): percorre a linha inteira de A e a coluna inteira de B,
+// somando os produtos — daí "naive", cada elemento de A/B é relido por várias threads.
 __global__ void GpuMatrixMultiplication(float *A, float *B, float *C, int m, int n, int o){
     int row = threadIdx.y + blockDim.y * blockIdx.y;
     int col = threadIdx.x + blockDim.x * blockIdx.x;
@@ -50,32 +53,9 @@ int main(){
     dim3 blockDim(BLOCK_SIZE, BLOCK_SIZE);
     dim3 gridDim((O + BLOCK_SIZE - 1) / BLOCK_SIZE, (M + BLOCK_SIZE - 1) / BLOCK_SIZE);
 
-    // warmup
-    for (int i = 0; i < 3; i++) {
-        GpuMatrixMultiplication<<<gridDim, blockDim>>>(d_A, d_B, d_C, M, N, O);
-    }
-    cudaDeviceSynchronize();
+    
 
-    cudaEvent_t start, stop;
-    cudaEventCreate(&start);
-    cudaEventCreate(&stop);
-
-    int iters = 20;
-    cudaEventRecord(start);
-    for (int i = 0; i < iters; i++) {
-        GpuMatrixMultiplication<<<gridDim, blockDim>>>(d_A, d_B, d_C, M, N, O);
-    }
-    cudaEventRecord(stop);
-    cudaEventSynchronize(stop);
-
-    float ms;
-    cudaEventElapsedTime(&ms, start, stop);
-    ms /= iters;
-
-    double flops = 2.0 * M * N * O;
-    double gflops = flops / (ms * 1e-3) / 1e9;
-
-    printf("Naive GEMM: %.4f ms | %.2f GFLOPs/s\n", ms, gflops);
+    GpuMatrixMultiplication<<<gridDim, blockDim>>>(d_A,d_B,d_C, M, N, O);
 
     cudaMemcpy(h_C, d_C, size_c, cudaMemcpyDeviceToHost);
     printf("C[0] = %f\n", h_C[0]);
