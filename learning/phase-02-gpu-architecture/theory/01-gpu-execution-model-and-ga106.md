@@ -26,7 +26,7 @@ GPU
     ├── unidades FP32/INT (frequentemente chamadas CUDA Cores)
     ├── Tensor Cores
     ├── registradores
-    └── shared memory + L1
+    └── shared memory + L1 c      
 
 Todos os SMs compartilham L2 e controladores que chegam à VRAM.
 ```
