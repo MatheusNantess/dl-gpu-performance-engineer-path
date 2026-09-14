@@ -247,3 +247,5 @@ cuda-lab/fundamentals/01-vector-add/02
 cuda-lab/fundamentals/01-vector-add/versionmatmul
 fundamentals/01-vector-add/matrix_naive/naive_4096_def
 fundamentals/01-vector-add/mutmul_naive_tilled/matmultilled_definitive
+fundamentals/matrix_algorithms/matrix_naive/naive_4096_def
+fundamentals/matrix_algorithms/mutmul_naive_tilled/matmultilled_definitive
